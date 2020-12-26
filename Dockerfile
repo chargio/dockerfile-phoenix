@@ -13,6 +13,7 @@ WORKDIR ${CODE}
 
 
 ENV MIX_ENV=prod
+ENV MIX_HOME=/usr/bin/
 
 RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\ 
     mix local.hex --force; \

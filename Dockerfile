@@ -8,8 +8,9 @@ ENV LOCALE=${LANG}
 ENV PHX_VER=1.5.7
 
 
-ENV CODE=src/
+ENV CODE=/src/
 WORKDIR ${CODE}
+
 
 
 ENV MIX_ENV=prod
@@ -21,7 +22,14 @@ RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/y
     mix archive.install hex phx_new ${PHX_VER} --force
 
 RUN git clone ${SRC_CODE} .
+
+RUN chown -R 1001:0 ${CODE}
+
+
+USER 1001
 RUN mix deps.get; mix deps.compile; \
     (cd assets; npm install;)
+
+
 
 CMD mix phx.server

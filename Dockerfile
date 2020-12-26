@@ -28,14 +28,13 @@ RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/y
 
 RUN git clone ${SRC_CODE} .
 
-RUN chown -R 1001:1001 ${CODE}
-
-
-USER 1001
 ENV HOME=${CODE}
 RUN mix deps.get; mix deps.compile; \
     (cd assets; npm install;)
 
+RUN chown -R 1001:1001 ${CODE}
 
+
+USER 1001
 
 CMD mix phx.server

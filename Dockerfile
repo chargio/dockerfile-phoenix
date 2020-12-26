@@ -11,7 +11,7 @@ ENV PHX_VER=1.5.7
 ENV CODE=src/
 WORKDIR ${CODE}
 
-RUN dnf -y install elixir nodejs git; dnf -y clean all\ 
+RUN dnf -y install elixir nodejs git; dnf -y clean all;\ 
     mix local.hex --force; \
     mix local.rebar --force ; \
     mix archive.install hex phx_new ${PHX_VER} --force

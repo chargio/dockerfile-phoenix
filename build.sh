@@ -1,2 +1,1 @@
-cp -r ../buildah_container  src
-cp -r  ../phoenix-container-buildah/ src
+buildah bud -t quay.io/chargio/phoenix-test

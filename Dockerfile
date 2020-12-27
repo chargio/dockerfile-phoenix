@@ -1,21 +1,19 @@
-FROM fedora:34
+FROM fedora:34 as build
 
 EXPOSE 4000
 
-LABEL io.k8s.description="Platform for building and running a phoenix app" \
+LABEL io.k8s.description="Container for building and running a phoenix app" \
       io.k8s.display-name="build-phoenix" \
       io.openshift.expose-services="4000:http" \
       io.openshift.tags="builder,elixir,phoenix"
 
 ENV SRC_CODE=https://github.com/chargio/phoenix-container-buildah.git
 ENV LANG=en_US.UTF-8
-ENV LOCALE=${LANG}
 ENV PHX_VER=1.5.7
 
 
-ENV CODE=/opt/app-root/
+ENV CODE=/app
 WORKDIR ${CODE}
-
 
 
 ENV MIX_ENV=prod
@@ -29,12 +27,26 @@ RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/y
 RUN git clone ${SRC_CODE} .
 
 ENV HOME=${CODE}
-RUN mix deps.get; mix deps.compile; \
-    (cd assets; npm install;)
+RUN mix do deps.get, deps.compile && \
+    npm --prefix ./assets ci --no-audit --no-audit --loglevel=error &&\
+    npm run --prefix ./assets deploy && mix phx.digest &&\
+    mix do compile, release
 
 RUN chown -R 1001:1001 ${CODE}
 
 
-USER 1001
+# prepare release image
+FROM fedora:34 AS app
+RUN dnf -y install openssl ncurses-libs
 
-CMD mix phx.server
+WORKDIR /deploy
+ENV HOME=/deploy
+
+RUN chown 1001:1001 ${HOME}
+
+USER 1001:1001
+
+COPY --from=build --chown=1001:1001 /app/_build/prod/rel/container ./
+
+
+CMD ["bin/container", "start"]

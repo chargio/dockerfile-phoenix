@@ -39,14 +39,14 @@ RUN chown -R 1001:1001 ${CODE}
 FROM fedora:34 AS app
 RUN dnf -y install openssl ncurses-libs
 
-WORKDIR /deploy
+WORKDIR /deploy/
 ENV HOME=/deploy
 
-RUN chown 1001:1001 ${HOME}
+RUN chown 1001:1001 /deploy
 
 USER 1001:1001
 
-COPY --from=build --chown=1001:1001 /app/_build/prod/rel/container ./
+COPY --from=build --chown=1001:1001 /app/_build/prod/rel/container .
 
 
 CMD ["bin/container", "start"]

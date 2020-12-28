@@ -30,7 +30,7 @@ ENV HOME=${CODE}
 RUN mix do deps.get, deps.compile && \
     npm --prefix ./assets ci --no-audit --no-audit --loglevel=error &&\
     npm run --prefix ./assets deploy && mix phx.digest &&\
-    mix do compile, release
+    mix do compile, release --path /app_release
 
 RUN chown -R 1001:1001 ${CODE}
 
@@ -46,7 +46,7 @@ RUN chown -R 1001:1001 /deploy
 
 USER 1001
 
-COPY --from=build --chown=1001:1001 /app/_build/prod/rel/container .
+COPY --from=build --chown=1001:1001 /app_release .
 RUN chmod -R u+w /deploy
 
 

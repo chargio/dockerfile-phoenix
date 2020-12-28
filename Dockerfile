@@ -32,7 +32,6 @@ RUN mix do deps.get, deps.compile && \
     npm run --prefix ./assets deploy && mix phx.digest &&\
     mix do compile, release --path /app_release
 
-RUN chown -R 1001:1001 ${CODE}
 
 
 # prepare release image

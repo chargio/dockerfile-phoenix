@@ -27,8 +27,8 @@ RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/y
 RUN git clone ${SRC_CODE} .
 
 ENV HOME=${CODE}
-RUN mix do deps.get, deps.compile && \
-    npm --prefix ./assets ci --no-audit --no-audit --loglevel=error &&\
+RUN mix do deps.get --only prod, deps.compile && \
+    npm --prefix ./assets ci --no-audit --loglevel=error &&\
     npm run --prefix ./assets deploy && mix phx.digest &&\
     mix do compile, release --path /app_release
 

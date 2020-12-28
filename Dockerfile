@@ -42,11 +42,11 @@ RUN dnf -y install openssl ncurses-libs
 WORKDIR /deploy/
 ENV HOME=/deploy
 
-RUN chown -R 1001:1001 /deploy
+RUN chown -R 1001:0 /deploy
 
 USER 1001
 
-COPY --from=build --chown=1001:1001 /app_release .
+COPY --from=build --chown=1001:0 /app_release .
 RUN chmod -R u+w /deploy
 
 

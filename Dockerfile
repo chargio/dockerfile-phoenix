@@ -36,17 +36,18 @@ RUN mix do deps.get, deps.compile && \
 
 # prepare release image
 FROM fedora:34 AS app
-RUN dnf -y install openssl ncurses-libs
+RUN dnf -y install openssl
 
 WORKDIR /deploy/
 ENV HOME=/deploy
 
-RUN chown -R 1001:0 /deploy
 
-USER 1001
+
 
 COPY --from=build --chown=1001:0 /app_release .
-RUN chmod -R u+w /deploy
+RUN chgrp -R 0 /deploy &&\
+    chmod -R g=u /deploy
 
+USER 1001
 
 CMD ["bin/container", "start"]

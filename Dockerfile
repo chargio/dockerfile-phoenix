@@ -36,7 +36,6 @@ RUN mix do deps.get --only prod, deps.compile && \
 
 # prepare release image
 FROM fedora:34 AS app
-RUN dnf -y install openssl
 
 WORKDIR /deploy/
 ENV HOME=/deploy

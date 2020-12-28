@@ -42,7 +42,7 @@ RUN dnf -y install openssl ncurses-libs
 WORKDIR /deploy/
 ENV HOME=/deploy
 
-RUN chown 1001:1001 /deploy
+RUN chown -R 1001:1001 /deploy
 
 USER 1001:1001
 

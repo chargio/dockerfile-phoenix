@@ -44,12 +44,10 @@ ENV HOME=/deploy
 
 RUN chown -R 1001:1001 /deploy
 
-USER 1001:1001
+USER 1001
 
 COPY --from=build --chown=1001:1001 /app/_build/prod/rel/container .
-RUN mkdir tmp
 RUN chmod -R u+w /deploy
-RUN ls -l tmp
 
 
 CMD ["bin/container", "start"]

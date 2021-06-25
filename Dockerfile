@@ -17,7 +17,7 @@ LABEL io.k8s.description="Container for building and running a phoenix app" \
       io.openshift.tags="builder,elixir,phoenix"
 
 ENV SRC_CODE=${SRC_CODE}
-ENV PHX_VER=${PHX_VER}
+# ENV PHX_VER=${PHX_VER}
 ENV LANG=en_US.UTF-8
 ENV MIX_ENV=${MIX_ENV}
 
@@ -32,8 +32,7 @@ ENV MIX_HOME=/usr/bin/
 # Installation of elixir, nodejs, git and phoenix
 RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\ 
     mix local.hex --force; \
-    mix local.rebar --force ; \
-    mix archive.install hex --force
+    mix local.rebar --force 
 
 # Copying the source code into the working directory
 RUN git clone ${SRC_CODE} .

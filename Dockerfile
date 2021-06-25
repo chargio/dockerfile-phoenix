@@ -7,8 +7,6 @@ EXPOSE 4000
 
 # Source code of the application
 ARG SRC_CODE=https://github.com/chargio/phoenix-container-buildah.git
-# Phoenix version
-ARG PHX_VER=1.5.7
 # MIX_ENV
 ARG MIX_ENV=prod
 
@@ -35,7 +33,7 @@ ENV MIX_HOME=/usr/bin/
 RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\ 
     mix local.hex --force; \
     mix local.rebar --force ; \
-    mix archive.install hex phx_new ${PHX_VER} --force
+    mix archive.install hex --force
 
 # Copying the source code into the working directory
 RUN git clone ${SRC_CODE} .

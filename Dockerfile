@@ -30,7 +30,8 @@ WORKDIR ${CODE}
 ENV MIX_HOME=/usr/bin/
 
 # Installation of elixir, nodejs, git and phoenix
-RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\ 
+RUN localedef --verbose --force -i en_US -f UTF-8 en_US.UTF-8; \
+    dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\ 
     mix local.hex --force; \
     mix local.rebar --force 
 

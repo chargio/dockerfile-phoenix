@@ -3,19 +3,22 @@
 
 Running a container image in Kubernetes / Openshift implies some changes to the configuration of the application and a Dockerfile that can create it.
 
-This Dockerfile uses a Fedora image to build a release from the source code, downloaded from GitHub, compiling it in the objective platform, and then creates a container with the minimal installation to make so it can run with the release.
+This Dockerfile uses a Fedora image to build a mix release from the source code, downloaded from GitHub, compiling it in the objective platform, and then creates a container with the minimal installation to make so it can run with the release.
 
-The code is run in production (production environment for node and MIX_ENV=prod).
+By default, the MIX_ENV is set to production (production environment for node and MIX_ENV=prod), but you can provide the environment as a build parameters.
 
-As it runs in production, you need to set up SECRET_KEY_BASE to make it run
+As it runs in production, you need to set up SECRET_KEY_BASE to make it run (there is no default)
 
-Environment variables  defined (See code for defaults):
+Environment variables  defined for the build (See code for defaults):
 -----
 
-SRC_CODE: The https git address of the source code
-PHX_VER: The phoenix version to be installed
+SRC_CODE: The https git address of the source code, defaults to a base phx image without ecto.
 MIX_ENV: THe environment to run the application (defaults to prod)
 
+
+-----
+
+Build.sh holds the configuration to upload your image to Quay.
 
 Locally:
 -----

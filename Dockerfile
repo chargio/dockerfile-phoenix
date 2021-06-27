@@ -1,6 +1,6 @@
 # A dockerfile to grab some source code from github, compile and create a release,
 #  and then create another container that executes the release
-FROM fedora:34 as build
+FROM fedora:35 as build
 
 # Standard port for the application (over 1024 to be run by any user)
 EXPOSE 4000
@@ -51,7 +51,7 @@ RUN mix do deps.get --only ${MIX_ENV}, deps.compile && \
 # Generating a new image that will run the application
 # Prepare release image with the necessary components and install the release
 
-FROM fedora:34 AS app
+FROM fedora:35 AS app
 
 WORKDIR /deploy/
 ENV HOME=/deploy

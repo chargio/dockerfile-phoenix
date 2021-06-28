@@ -19,8 +19,8 @@ LABEL io.k8s.description="Container for building and running a phoenix app" \
 # Define where the source code can be found
 ENV SRC_CODE=${SRC_CODE}
 
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 
 ENV MIX_ENV=${MIX_ENV}
 

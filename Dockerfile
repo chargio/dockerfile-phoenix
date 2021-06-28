@@ -7,7 +7,7 @@ EXPOSE 4000
 
 # Source code of the application
 ARG SRC_CODE=https://github.com/chargio/phoenix-container-buildah.git
-# MIX_ENV
+# MIX_ENV dev, test, prod
 ARG MIX_ENV=prod
 
 # Useful OpenShift labels for the application
@@ -16,14 +16,20 @@ LABEL io.k8s.description="Container for building and running a phoenix app" \
       io.openshift.expose-services="4000:http" \
       io.openshift.tags="builder,elixir,phoenix"
 
+# Define where the source code can be found
 ENV SRC_CODE=${SRC_CODE}
-# ENV PHX_VER=${PHX_VER}
-ENV LANG=en_US.UTF-8
+
+
+# Configure language to avoid errors in scripts
+RUN echo "export LANG=en_US.utf-8" > /opt/export_LANG.sh
+ENV BASH_ENV=/opt/export_LANG.sh \
+    ENV=/opt/export_LANG.sh \
+    PROMPT_COMMAND="source /opt/export_LANG.sh"
 ENV MIX_ENV=${MIX_ENV}
 
 # The code will be in this directory in the image
 ENV CODE=/app
-# Changing working directory to restraing access
+# Changing working directory to restrain access
 WORKDIR ${CODE}
 
 # We need this to avoid problems where MIX_HOME is not found

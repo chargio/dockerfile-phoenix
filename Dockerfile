@@ -10,6 +10,8 @@ ARG SRC_CODE=https://github.com/chargio/phoenix-container-buildah.git
 # MIX_ENV dev, test, prod
 ARG MIX_ENV=prod
 
+ARG NODE_APP=.
+
 # Useful OpenShift labels for the application
 LABEL io.k8s.description="Container for building and running a phoenix app" \
       io.k8s.display-name="build-phoenix" \
@@ -34,7 +36,7 @@ ENV MIX_HOME=/usr/bin/
 
 # Installation of elixir, nodejs, git and phoenix
 RUN dnf -y install glibc-locale-source glibc-langpack-en; \
-    localedef --verbose --force -i en_US -f UTF-8 en_US.UTF-8; \
+    localedef --verbose --force -i C -f UTF-8 en_US.UTF-8; \
     dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\
     mix local.hex --force; \
     mix local.rebar --force
@@ -47,8 +49,8 @@ ENV HOME=${CODE}
 # Compile assets and prepare release
 
 RUN mix do deps.get --only ${MIX_ENV}, deps.compile && \
-    npm --prefix ./assets ci --no-audit --loglevel=error &&\
-    npm run --prefix ./assets deploy && mix phx.digest &&\
+    npm --prefix ${NODE_APP}/assets ci --no-audit --loglevel=error &&\
+    npm run --prefix ${NODE_APP}/assets deploy && mix phx.digest &&\
     mix do compile, release --path /app_release
 
 

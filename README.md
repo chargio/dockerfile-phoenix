@@ -13,8 +13,9 @@ Environment variables  defined for the build (See code for defaults):
 -----
 
 SRC_CODE: The https git address of the source code, defaults to a base phx image without ecto.
-MIX_ENV: THe environment to run the application (defaults to prod)
-
+MIX_ENV: The environment to run the application (defaults to prod)
+NODE_APP: The Dockerfile will run `npm run` on the ${PREFIX}/assets file, in case you are using an umbrella app
+In that case, you will need to define a `container`release to be able to use mix release on it and run it
 
 -----
 
@@ -27,4 +28,3 @@ podman run --env "SECRET_KEY_BASE=$SECRET_KEY_BASE" <--env "OTHER ENV=VALE" <ima
 In OCP:
 -----
 Make sure that the SECRET_KEY_BASE environment variable is present in the environment.
-

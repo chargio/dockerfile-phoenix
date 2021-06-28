@@ -25,6 +25,7 @@ RUN echo "export LANG=en_US.utf-8" > /opt/export_LANG.sh
 ENV BASH_ENV=/opt/export_LANG.sh \
     ENV=/opt/export_LANG.sh \
     PROMPT_COMMAND="source /opt/export_LANG.sh"
+    
 ENV MIX_ENV=${MIX_ENV}
 
 # The code will be in this directory in the image
@@ -36,10 +37,11 @@ WORKDIR ${CODE}
 ENV MIX_HOME=/usr/bin/
 
 # Installation of elixir, nodejs, git and phoenix
-RUN localedef --verbose --force -i en_US -f UTF-8 en_US.UTF-8; \
-    dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\ 
+RUN dnf -y install glibc-locale-source glibc-langpack-en; \
+    localedef --verbose --force -i en_US -f UTF-8 en_US.UTF-8; \
+    dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\
     mix local.hex --force; \
-    mix local.rebar --force 
+    mix local.rebar --force
 
 # Copying the source code into the working directory
 RUN git clone ${SRC_CODE} .

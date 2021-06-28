@@ -19,13 +19,9 @@ LABEL io.k8s.description="Container for building and running a phoenix app" \
 # Define where the source code can be found
 ENV SRC_CODE=${SRC_CODE}
 
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
-# Configure language to avoid errors in scripts
-RUN echo "export LANG=en_US.utf-8" > /opt/export_LANG.sh
-ENV BASH_ENV=/opt/export_LANG.sh \
-    ENV=/opt/export_LANG.sh \
-    PROMPT_COMMAND="source /opt/export_LANG.sh"
-    
 ENV MIX_ENV=${MIX_ENV}
 
 # The code will be in this directory in the image

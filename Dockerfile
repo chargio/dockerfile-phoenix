@@ -10,6 +10,7 @@ ARG SRC_CODE=https://github.com/chargio/phoenix-container-buildah.git
 # MIX_ENV dev, test, prod
 ARG MIX_ENV=prod
 
+# The application path, in the format apps/application_web
 ARG NODE_APP=.
 
 # Useful OpenShift labels for the application
@@ -21,6 +22,7 @@ LABEL io.k8s.description="Container for building and running a phoenix app" \
 # Define where the source code can be found
 ENV SRC_CODE=${SRC_CODE}
 
+# Setting up locale so it does not complain about misconfigured latin1
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
@@ -35,9 +37,7 @@ WORKDIR ${CODE}
 ENV MIX_HOME=/usr/bin/
 
 # Installation of elixir, nodejs, git and phoenix
-RUN dnf -y install glibc-locale-source glibc-langpack-en; \
-    localedef --verbose --force -i C -f UTF-8 en_US.UTF-8; \
-    dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\
+RUN dnf -y install elixir nodejs git &&  dnf -y clean all && rm -rf /var/cache/yum;\
     mix local.hex --force; \
     mix local.rebar --force
 
@@ -62,6 +62,9 @@ FROM fedora:35 AS app
 
 WORKDIR /deploy/
 ENV HOME=/deploy
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 
 # Copying source code to the destination
 COPY --from=build --chown=1001:0 /app_release .
